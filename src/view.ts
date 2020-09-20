@@ -1,11 +1,10 @@
 import {VNode} from 'snabbdom/build/package/vnode'
 import {h} from 'snabbdom/build/package/h'
 import {Dispatcher, State} from './types'
+import {styles} from './stylesheet'
 
 const getUnassigned = (state: State): Array<string> =>
   Object.keys(state.tags).filter((tag) => state.tags[tag].groupId === null)
-
-// const hasGroupId = (tag:string):  => state.tags[tag].groupId !== null
 
 const getGroups = (state: State): Record<string, Array<string>> =>
   Object.keys(state.tags)
@@ -20,17 +19,40 @@ const getGroups = (state: State): Record<string, Array<string>> =>
       }
     }, {})
 
-const hTag = (tag: string) => h('div', [tag])
+const hTag = (tag: string) =>
+  h(
+    'div',
+    {
+      class: {
+        [styles.tag]: true
+      }
+    },
+    [tag]
+  )
 
 export const view = (d: Dispatcher<State>, state: State): VNode => {
   const groups = getGroups(state)
 
-  return h('div.layout', [
-    h('div.tags', getUnassigned(state).map(hTag)),
+  return h('div', [
+    h('h1', ['Unselected']),
     h(
-      'div.groups',
+      'div',
+      {class: {[styles.unselectedTags]: true}},
+      getUnassigned(state).map(hTag)
+    ),
+    h(
+      'div',
+      {
+        [styles.groupsContainer]: true
+      },
       Object.keys(groups).map((groupId) =>
-        h('div', [h('div', [groupId]), h('div', groups[groupId].map(hTag))])
+        h(
+          'div',
+          {
+            class: {[styles.group]: true}
+          },
+          [h('h2', [groupId]), h('div', groups[groupId].map(hTag))]
+        )
       )
     )
   ])

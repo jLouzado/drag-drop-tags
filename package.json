@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "faker": "^5.1.0",
-    "snabbdom": "^2.1.0"
+    "snabbdom": "^2.1.0",
+    "typestyle": "2.0.2"
   },
   "devDependencies": {
     "@types/faker": "^5.1.0",
